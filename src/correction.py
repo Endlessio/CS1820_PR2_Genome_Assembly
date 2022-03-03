@@ -108,11 +108,11 @@ class Correction:
                 for check_idx in range(len(cur_read)-self.k+1):
                     if dp[check_idx] == 1:
                         res_idx.add(read_idx)
-                        print("dp", dp)
-                        print(check_idx, cur_read[check_idx: check_idx+self.k], closest_pair_dict[cur_read[check_idx: check_idx+self.k]])
+                        # print("dp", dp)
+                        # print(check_idx, cur_read[check_idx: check_idx+self.k], closest_pair_dict[cur_read[check_idx: check_idx+self.k]])
                         replace_to = closest_pair_dict[cur_read[check_idx: check_idx+self.k]][0][1]
                         cur_read = cur_read[:check_idx]+replace_to+cur_read[check_idx+self.k:]
-                        print(len(cur_read))
+                        # print(len(cur_read))
                 res[read_idx] = cur_read
         return res, res_idx
 
