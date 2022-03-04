@@ -2,7 +2,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import pickle
 
-fr = open('./graph_dict_simple.txt','rb')
+fr = open('./res_store_graph_dict_simple.txt','rb')
 graph_dict = pickle.load(fr)
 x_axis = [i for i in range(6,26)]
 y_2 = graph_dict[2]
