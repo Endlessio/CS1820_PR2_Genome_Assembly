@@ -304,9 +304,9 @@ def main(argv):
 
     # choose your algorithm
     res, res_idx = correction.stack_replace(closest_pair_dict)
-    res, res_idx = correction.simple_replace(closest_pair_dict)
-    res, res_idx = correction.naive_replace(closest_pair_dict)
-    res, res_idx = correction.opt_merge_replace(closest_pair_dict, infrequent_kmer_dict)
+    # res, res_idx = correction.simple_replace(closest_pair_dict)
+    # res, res_idx = correction.naive_replace(closest_pair_dict)
+    # res, res_idx = correction.opt_merge_replace(closest_pair_dict, infrequent_kmer_dict)
 
     # print out
     correction.print_output(res, res_idx)
