@@ -4,9 +4,7 @@ import random
 from os.path import exists
 import pickle
 import math
-from tracemalloc import start
 
-from numpy import gradient
 
 from local_alignment import LocalAlignment
 from correction import Correction
