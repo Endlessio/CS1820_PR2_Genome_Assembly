@@ -115,89 +115,89 @@ def main(argv):
                 cur = line.strip()
                 mutated_reads.append(cur)
     
-    # # do the alignment
-    # if not exists("./alignment_score.txt"):
-    #     print("check alignment score")
-    #     seq = []
-    #     for i in range(len(mutated_reads)):
-    #         seq.append(true_reads[i])
-    #         seq.append(mutated_reads[i])
-    #     score_list = []
-    #     for idx in range(0, len(seq), 2):
-    #         align = LocalAlignment(seq, matrix, float('-inf'))
-    #         align.local_alignment(idx)
-    #         # align.print_output(idx)
-    #         score_list.append(align.imax)
-    #     with open('alignment_score.txt', 'w') as f:
-    #         S_m = sum(score_list)/len(score_list)
-    #         f.write(str(S_m))
-    #         f.write('\n')
-    #         f.write(" ".join(str(i) for i in score_list))
-    # else:
-    #     with open('alignment_score.txt', 'r') as f:
-    #         S_m = float(f.readline())
-    #     # S_m = 49.03804347826087
+    # do the alignment
+    if not exists("./alignment_score.txt"):
+        print("check alignment score")
+        seq = []
+        for i in range(len(mutated_reads)):
+            seq.append(true_reads[i])
+            seq.append(mutated_reads[i])
+        score_list = []
+        for idx in range(0, len(seq), 2):
+            align = LocalAlignment(seq, matrix, float('-inf'))
+            align.local_alignment(idx)
+            # align.print_output(idx)
+            score_list.append(align.imax)
+        with open('alignment_score.txt', 'w') as f:
+            S_m = sum(score_list)/len(score_list)
+            f.write(str(S_m))
+            f.write('\n')
+            f.write(" ".join(str(i) for i in score_list))
+    else:
+        with open('alignment_score.txt', 'r') as f:
+            S_m = float(f.readline())
+        # S_m = 49.03804347826087
 
-    # # correct
-    # k = [i for i in range(6, 26)]
-    # t = [4, 6, 8, 10, 12]
-    # # k = [7]
-    # # t = [4]
-    # d = 2
-    # res_dict = defaultdict(list)
-    # for cur_k in k:
-    #     for cur_t in t:
-    #         correction = Correction(mutated_reads, cur_k, cur_t, d)
-    #         kmer_list, tot_kmer_dict = correction.form_kmer(cur_k)
-    #         # print(tot_kmer_dict)
-    #         infrequent_kmer_dict, frequent_kmer_dict = correction.find_infrequent(tot_kmer_dict, cur_t)
-    #         # print(frequent_kmer_dict)
-    #         closest_pair_dict = correction.find_closest(frequent_kmer_dict, infrequent_kmer_dict, d, cur_k)
-    #         # print(closest_pair_dict)
-    #         if argv[3] == 'simple':
-    #             res, res_idx = correction.simple_replace(closest_pair_dict)
-    #         if argv[3] == 'naive':
-    #             res, res_idx = correction.naive_replace(closest_pair_dict)
-    #             # print(res_idx)
-    #         if argv[3] == 'merge':
-    #             res, res_idx = correction.merge_replace(closest_pair_dict, infrequent_kmer_dict)
-    #         if argv[3] == 'opt_merge':
-    #             res, res_idx = correction.opt_merge_replace(closest_pair_dict, infrequent_kmer_dict)
-    #         if argv[3] == 'stack':
-    #             res, res_idx = correction.stack_replace(closest_pair_dict)
-    #         # for i in range(len(res)):
-    #         #     # print(res[i]==mutated_reads[i])
-    #         res_dict[(cur_k, cur_t)] = res
-    #         f=open('./'+str(cur_k)+"_"+str(cur_t)+"_"+str(argv[3])+".txt",'wb')
-    #         pickle.dump(res,f)
-    #         f.close()
+    # correct
+    k = [i for i in range(6, 26)]
+    t = [4, 6, 8, 10, 12]
+    # k = [7]
+    # t = [4]
+    d = 2
+    res_dict = defaultdict(list)
+    for cur_k in k:
+        for cur_t in t:
+            correction = Correction(mutated_reads, cur_k, cur_t, d)
+            kmer_list, tot_kmer_dict = correction.form_kmer(cur_k)
+            # print(tot_kmer_dict)
+            infrequent_kmer_dict, frequent_kmer_dict = correction.find_infrequent(tot_kmer_dict, cur_t)
+            # print(frequent_kmer_dict)
+            closest_pair_dict = correction.find_closest(frequent_kmer_dict, infrequent_kmer_dict, d, cur_k)
+            # print(closest_pair_dict)
+            if argv[3] == 'simple':
+                res, res_idx = correction.simple_replace(closest_pair_dict)
+            if argv[3] == 'naive':
+                res, res_idx = correction.naive_replace(closest_pair_dict)
+                # print(res_idx)
+            if argv[3] == 'merge':
+                res, res_idx = correction.merge_replace(closest_pair_dict, infrequent_kmer_dict)
+            if argv[3] == 'opt_merge':
+                res, res_idx = correction.opt_merge_replace(closest_pair_dict, infrequent_kmer_dict)
+            if argv[3] == 'stack':
+                res, res_idx = correction.stack_replace(closest_pair_dict)
+            # for i in range(len(res)):
+            #     # print(res[i]==mutated_reads[i])
+            res_dict[(cur_k, cur_t)] = res
+            f=open('./'+str(cur_k)+"_"+str(cur_t)+"_"+str(argv[3])+".txt",'wb')
+            pickle.dump(res,f)
+            f.close()
                 
 
 
-    # # calculate final alignment and form graph
-    # graph_dict = defaultdict(list)
-    # for cur_t in t:
-    #     for cur_k in k:
-    #         f = open('./'+str(cur_k)+"_"+str(cur_t)+"_"+str(argv[3])+".txt",'rb')
-    #         corrected_reads = pickle.load(f)
-    #         f.close()      
-    #         seq = []
-    #         for i in range(len(corrected_reads)):
-    #             seq.append(corrected_reads[i])
-    #             seq.append(true_reads[i])
-    #         score_list = []
-    #         for idx in range(0, len(seq), 2):
-    #             align = LocalAlignment(seq, matrix, float('-inf'))
-    #             align.local_alignment(idx)
-    #             score_list.append(align.imax)
-    #         S_k = sum(score_list)/len(score_list)
-    #         res = -math.log((50-S_k)/(50-S_m))
-    #         graph_dict[cur_t].append(res)
-    #         print(cur_t, cur_k, score_list)
-    # print(graph_dict)
-    # f = open("./graph_dict"+str(argv[3])+".txt",'wb')
-    # pickle.dump(graph_dict,f)
-    # f.close()
+    # calculate final alignment and form graph
+    graph_dict = defaultdict(list)
+    for cur_t in t:
+        for cur_k in k:
+            f = open('./'+str(cur_k)+"_"+str(cur_t)+"_"+str(argv[3])+".txt",'rb')
+            corrected_reads = pickle.load(f)
+            f.close()      
+            seq = []
+            for i in range(len(corrected_reads)):
+                seq.append(corrected_reads[i])
+                seq.append(true_reads[i])
+            score_list = []
+            for idx in range(0, len(seq), 2):
+                align = LocalAlignment(seq, matrix, float('-inf'))
+                align.local_alignment(idx)
+                score_list.append(align.imax)
+            S_k = sum(score_list)/len(score_list)
+            res = -math.log((50-S_k)/(50-S_m))
+            graph_dict[cur_t].append(res)
+            print(cur_t, cur_k, score_list)
+    print(graph_dict)
+    f = open("./graph_dict"+str(argv[3])+".txt",'wb')
+    pickle.dump(graph_dict,f)
+    f.close()
 
 
 
