@@ -13,7 +13,6 @@ class Contamination:
         for i in range(length-self.k+1):
             kmer2idx_dict[self.vector[i:i+self.k]].append(i)
         return kmer2idx_dict
-        # print(kmer2idx_dict)
 
     def left_end_extend(self, seq, start_idx_list):
         imax = self.k
@@ -61,7 +60,6 @@ class Contamination:
         res = []
         res_idx = []
         for idx, seq in enumerate(self.contam_read):
-            # print(seq, self.k)
             # check left end
             if seq[:self.k] in kmer2idx_dict:
                 imax = self.left_end_extend(seq, kmer2idx_dict[seq[:self.k]])
@@ -73,8 +71,6 @@ class Contamination:
                 seq = seq[:-imax]
             res.append(seq)
             res_idx.append(idx)
-        # print(res)
-        # print(res_idx)
         return res, res_idx
 
     
@@ -112,7 +108,6 @@ def preprocessing(argv):
 
 def main(argv):
     contam_read, vector, k = preprocessing(argv)
-    # print(contam_read, vector, k)
     contam = Contamination(contam_read, vector, k)
     kmer2idx_dict = contam.vector2kmer()
     res, res_idx = contam.end_match(kmer2idx_dict)
